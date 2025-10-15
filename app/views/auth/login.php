@@ -1,80 +1,278 @@
-<?php // views/auth/login.php ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full bg-[#212631] text-[#ebebeb]">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Login | Project CRUD</title>
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  <!-- TF2 CSS (self-contained) -->
-  <?php include __DIR__ . '/_tf2_shared.php'; ?>
-</head>
-<body class="min-h-screen flex items-center justify-center p-4">
-  <main class="w-full max-w-md tf2-panel">
-    <h1 class="text-2xl">Project CRUD</h1>
-    <p class="muted small mb-4">Sign in to continue</p>
-
-    <?php if (isset($error)): ?>
-      <div class="mb-3 text-sm text-red-300 bg-red-900/20 border border-red-700 px-3 py-2 rounded-md">
-        <?= $error; ?>
-      </div>
-    <?php endif; ?>
-
-    <form action="<?= site_url('auth/login') ?>" method="post" class="space-y-4">
-      <div>
-        <label for="name">Username or Email</label>
-        <input id="name" name="name" type="text" placeholder="name or email" required />
-      </div>
-
-      <div class="relative">
-        <label for="password">Password</label>
-        <input id="password" name="password" type="password" placeholder="password" required style="padding-right:3rem;" />
-        <button type="button" id="togglePassword" aria-label="Toggle password visibility"
-                style="position:absolute;right:.6rem;top:38px;background:transparent;border:0;color:var(--tf2-text);cursor:pointer">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" style="width:1.15rem;height:1.15rem" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path id="eyePath" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-            <path id="eyePath2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-          </svg>
-        </button>
-      </div>
-
-      <div class="flex items-center justify-between">
-        <button type="submit" class="tf2-btn tf2-primary">Login</button>
-        <a href="<?= site_url('/') ?>" class="muted small">Back to Home</a>
-      </div>
-    </form>
-
-    <p class="text-sm muted mt-4">Don't have an account? <a href="<?= site_url('auth/register') ?>" class="underline">Register</a></p>
-  </main>
-
-  <script>
-    (function(){
-      const toggle = document.getElementById('togglePassword');
-      const pwd = document.getElementById('password');
-      const eyePath = document.getElementById('eyePath');
-      const eyePath2 = document.getElementById('eyePath2');
-      const paths = {
-        eye: [
-          "M15 12a3 3 0 11-6 0 3 3 0 016 0z",
-          "M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-        ],
-        eyeOff: [
-          "M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a10.05 10.05 0 011.66-3.156M6.25 6.25l11.5 11.5",
-          ""
-        ]
-      };
-      toggle.addEventListener('click', function(){
-        const type = pwd.getAttribute('type') === 'password' ? 'text' : 'password';
-        pwd.setAttribute('type', type);
-        if(type === 'password'){
-          eyePath.setAttribute('d', paths.eye[0]); eyePath2.setAttribute('d', paths.eye[1]);
-        } else {
-          eyePath.setAttribute('d', paths.eyeOff[0]); eyePath2.setAttribute('d', paths.eyeOff[1]);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        :root {
+            --bg: #000000;
+            --panel: #151515;
+            --text: #e5e5e5;
+            --accent: #00bfff;
+            --accent-dark: #1e40af;
+            --input-bg: #1a1a1a;
+            --border: #333333;
+            --radius: 12px;
+            --shadow: 0 8px 32px rgba(0, 191, 255, 0.1);
         }
-      });
-    })();
-  </script>
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg);
+            background-image: radial-gradient(circle at 20% 80%, rgba(0, 191, 255, 0.05) 0%, transparent 50%),
+                              radial-gradient(circle at 80% 20%, rgba(0, 191, 255, 0.03) 0%, transparent 50%);
+            color: var(--text);
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        main {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            width: 100%;
+            max-width: 24rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        main::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+        }
+
+        h1 {
+            color: var(--accent);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            color: var(--text);
+        }
+
+        input {
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.75rem;
+            color: var(--text);
+            font-size: 0.875rem;
+            outline: none;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 8px rgba(0, 191, 255, 0.5);
+            transform: scale(1.01);
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .password-container button {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-size: 1.125rem;
+            transition: color 0.2s ease;
+        }
+
+        .password-container button:hover {
+            color: var(--text);
+        }
+
+        button[type="submit"] {
+            background: var(--accent);
+            color: #000;
+            border: 2px solid var(--accent);
+            border-radius: 6px;
+            padding: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        button[type="submit"]:hover {
+            background: var(--accent-dark);
+            box-shadow: 0 4px 16px rgba(0, 191, 255, 0.6);
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        a {
+            display: flex;
+            justify-content: center;
+            background: var(--input-bg);
+            color: var(--text);
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            padding: 0.75rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        a:hover {
+            background: #2a2a2a;
+            border-color: var(--accent);
+            box-shadow: 0 4px 16px rgba(0, 191, 255, 0.3);
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        p {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.875rem;
+        }
+
+        p a {
+            color: var(--accent);
+            text-decoration: underline;
+            transition: color 0.2s ease;
+        }
+
+        p a:hover {
+            color: var(--accent-dark);
+            text-shadow: 0 0 8px rgba(0, 191, 255, 0.5);
+        }
+
+        .error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 640px) {
+            main {
+                padding: 1.5rem;
+                max-width: 20rem;
+            }
+            h1 {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <main>
+        <h1>LOGIN</h1>
+
+        <?php if (isset($error)): ?>
+            <div class="error">
+                <?= $error; ?>
+            </div>
+        <?php endif; ?>
+
+        <form action="<?= site_url('login'); ?>" method="post">
+            <label for="name">Username or Email:</label>
+            <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="name or email"
+                required />
+
+            <label for="password">Password:</label>
+            <div class="password-container">
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="password"
+                    required />
+                <button type="button" id="togglePassword">
+                    <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path id="eyePath" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path id="eyePath2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                </button>
+            </div>
+
+            <button type="submit">Login</button>
+
+            <a href="<?= site_url('/'); ?>">Back to Home</a>
+        </form>
+
+        <p>Don't have an account?
+            <a href="<?= site_url('register'); ?>">Register</a>
+        </p>
+    </main>
+
+    <script>
+        const togglePassword = document.getElementById("togglePassword");
+        const passwordField = document.getElementById("password");
+        const eyePath = document.getElementById("eyePath");
+        const eyePath2 = document.getElementById("eyePath2");
+
+        const eyeSVGPaths = {
+            eye: [
+                "M15 12a3 3 0 11-6 0 3 3 0 016 0z",
+                "M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+            ],
+            eyeOff: [
+                "M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a10.05 10.05 0 011.66-3.156M6.25 6.25l11.5 11.5",
+                ""
+            ]
+        };
+
+        togglePassword.addEventListener("click", function() {
+            const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
+            passwordField.setAttribute("type", type);
+
+            if (type === "password") {
+                eyePath.setAttribute("d", eyeSVGPaths.eye[0]);
+                eyePath2.setAttribute("d", eyeSVGPaths.eye[1]);
+            } else {
+                eyePath.setAttribute("d", eyeSVGPaths.eyeOff[0]);
+                eyePath2.setAttribute("d", eyeSVGPaths.eyeOff[1]);
+            }
+        });
+    </script>
 </body>
+
 </html>

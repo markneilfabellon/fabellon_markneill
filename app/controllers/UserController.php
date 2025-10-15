@@ -23,7 +23,7 @@ class UserController extends Controller {
             $q = trim($this->io->get('q'));
         }
 
-        $records_per_page = 10; // number of users per page
+        $records_per_page = 5; // number of users per page
 
         // Call model's pagination method
         $all = $this->UserModel->page($q, $records_per_page, $page);
@@ -48,6 +48,10 @@ class UserController extends Controller {
     }
 
     public function create() {
+        $current_role = $this->session->userdata('role');
+        if ($current_role !== 'admin') {
+            redirect('users/show');
+        }
         if($this->io->method() == 'post'){
             $lastname = $this->io->post('last_name');
             $firstname = $this->io->post('first_name');
@@ -68,6 +72,10 @@ class UserController extends Controller {
     }
 
     public function update($id) {
+        $current_role = $this->session->userdata('role');
+        if ($current_role !== 'admin') {
+            redirect('users/show');
+        }
         $data['user'] = $this->UserModel->find($id);
         if($this->io->method() == 'post'){
             $lastname = $this->io->post('last_name');
@@ -89,6 +97,10 @@ class UserController extends Controller {
     }
 
     public function delete($id){
+        $current_role = $this->session->userdata('role');
+        if ($current_role !== 'admin') {
+            redirect('users/show');
+        }
         if($this->UserModel->delete($id)){
             redirect('users/show');
         } else {
@@ -104,7 +116,7 @@ class UserController extends Controller {
             $user = $this->UserModel->login($name, $password);
             if ($user) {
                 $this->session->set_userdata('user_id', $user['id']);
-                $this->session->set_userdata('name', $user['name']);
+                $this->session->set_userdata('name', $user['username']);
                 $this->session->set_userdata('role', $user['role']);
                 redirect('users/show');
             } else {
@@ -118,13 +130,25 @@ class UserController extends Controller {
 
     public function register() {
         if ($this->io->method() == 'post') {
-            $name = $this->io->post('name');
+            $username = $this->io->post('username');
             $email = $this->io->post('email');
             $password = $this->io->post('password');
-            $role = $this->io->post('role') ?? 'user'; // get role from form or default to user
+            $role = $this->io->post('role');
+
+            // Check if username or email already exists
+            if ($this->UserModel->username_exists($username)) {
+                $data['error'] = 'Username already exists. Please choose a different one.';
+                $this->call->view('user_auth/register', $data);
+                return;
+            }
+            if ($this->UserModel->email_exists($email)) {
+                $data['error'] = 'Email already exists. Please use a different email.';
+                $this->call->view('user_auth/register', $data);
+                return;
+            }
 
             $data = [
-                'name' => $name,
+                'username' => $username,
                 'email' => $email,
                 'password' => $password,
                 'role' => $role

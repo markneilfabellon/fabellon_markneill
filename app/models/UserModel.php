@@ -44,9 +44,24 @@ class UserModel extends Model {
         return $this->db->table('users')->insert($data);
     }
 
+    public function get_role($user_id) {
+        $user = $this->db->table('users')->where('id', $user_id)->get();
+        return $user ? $user['role'] : 'user';
+    }
+
+    public function username_exists($username) {
+        $user = $this->db->table('users')->where('username', $username)->get();
+        return $user ? true : false;
+    }
+
+    public function email_exists($email) {
+        $user = $this->db->table('users')->where('email', $email)->get();
+        return $user ? true : false;
+    }
+
     public function login($name, $password) {
         $user = $this->db->table('users')
-                         ->where('name', $name)
+                         ->where('username', $name)
                          ->or_where('email', $name)
                          ->get();
 
