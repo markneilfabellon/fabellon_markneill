@@ -89,7 +89,7 @@ class UserController extends Controller {
             if($this->UserModel->update($id, $update_data)){
                 redirect('users/show');
             } else {
-                echo 'Update failed. Please check your data and try again.';
+                echo 'Update failed: Please check your data and try again.';
             }
         } else {
             $this->call->view('students/update', $data);
