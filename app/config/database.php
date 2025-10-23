@@ -58,14 +58,25 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 */
 
 $database['main'] = array(
-    'driver'    => 'mysql',
-    'hostname'  => 'sql12.freesqldatabase.com',
+    'driver'    => 'sql12.freesqldatabase.com',
+    'hostname'  => 'sql12804170',
     'port'      => '3306',
     'username'  => 'sql12804170',
     'password'  => 'mXeW9D5acV',
-    'database'  => 'sql12804170',
-    'charset'   => 'utf8mb4',
+    'database'  => 'mockdata',
+    'charset'   => 'utf8',
     'dbprefix'  => '',
 );
+
+// Parse DATABASE_URL for Render's PostgreSQL
+if (isset($_ENV['DATABASE_URL'])) {
+    $db_url = parse_url($_ENV['DATABASE_URL']);
+    $database['main']['driver'] = 'pgsql';
+    $database['main']['hostname'] = $db_url['host'];
+    $database['main']['port'] = $db_url['port'];
+    $database['main']['username'] = $db_url['user'];
+    $database['main']['password'] = $db_url['pass'];
+    $database['main']['database'] = ltrim($db_url['path'], '/');
+}
 
 ?>
