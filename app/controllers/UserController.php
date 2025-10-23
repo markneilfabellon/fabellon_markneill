@@ -39,7 +39,7 @@ class UserController extends Controller {
             'page_delimiter' => '&page='
         ]);
         $this->pagination->set_theme('tailwind'); // themes: bootstrap, tailwind, custom
-        $this->pagination->initialize($total_rows, $records_per_page, $page, site_url('users/show').'?q='.$q);
+        $this->pagination->initialize($total_rows, $records_per_page, $page, 'users/show?q='.$q);
 
         // Send data to view
         $data['page'] = $this->pagination->paginate();
