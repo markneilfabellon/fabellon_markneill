@@ -58,12 +58,12 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 */
 
 $database['main'] = array(
-    'driver'    => 'pgsql',
-    'hostname'  => '',
-    'port'      => '',
-    'username'  => '',
-    'password'  => '',
-    'database'  => '',
+    'driver'    => 'sql12.freesqldatabase.com',
+    'hostname'  => 'sql12804170',
+    'port'      => '3306',
+    'username'  => 'sql12804170',
+    'password'  => 'mXeW9D5acV',
+    'database'  => 'mockdata',
     'charset'   => 'utf8',
     'dbprefix'  => '',
 );

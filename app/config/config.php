@@ -79,7 +79,7 @@ $config['ENVIRONMENT']             = 'production';
 | WARNING: You MUST set this value!
 |
 */
-$config['base_url'] 				= isset($_ENV['RENDER_EXTERNAL_URL']) ? $_ENV['RENDER_EXTERNAL_URL'] . '/' : '';
+$config['base_url'] 				= '';
 
 /*
 |--------------------------------------------------------------------------
