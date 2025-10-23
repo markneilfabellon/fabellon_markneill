@@ -157,7 +157,7 @@
 
 <body>
   <div class="form-container">
-    <h1>PDATE USER</h1>
+    <h1>UPDATE USER</h1>
 
     <form action="<?=site_url('users/update/'.$user['id']);?>" method="post">
       <div class="form-group">

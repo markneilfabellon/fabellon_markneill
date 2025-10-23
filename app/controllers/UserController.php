@@ -81,15 +81,15 @@ class UserController extends Controller {
             $lastname = $this->io->post('last_name');
             $firstname = $this->io->post('first_name');
             $email = $this->io->post('email');
-            $data = array(
+            $update_data = array(
                 'last_name' => $lastname,
                 'first_name' => $firstname,
                 'email' => $email
             );
-            if($this->UserModel->update($id, $data)){
+            if($this->UserModel->update($id, $update_data)){
                 redirect('users/show');
             } else {
-                echo 'Something went wrong';
+                echo 'Update failed. Please check your data and try again.';
             }
         } else {
             $this->call->view('students/update', $data);
